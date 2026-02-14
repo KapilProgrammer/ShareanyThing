@@ -15,6 +15,7 @@ export default function ProtectedLayout() {
   return (
     <Stack>
       <Stack.Screen name='(tabs)' options={{headerShown: false}} />
+      <Stack.Screen name='groupSelecter' options={{headerShown: false}} />
       <Stack.Screen name='post/[id]'
           options={{
             headerTitle: '',

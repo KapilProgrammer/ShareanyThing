@@ -1,32 +1,25 @@
-import { Text, View, Image, StyleSheet, FlatList } from "react-native";
+import { Text, View, Image, StyleSheet, FlatList, ActivityIndicator } from "react-native";
 import PostListItem from "../../../components/PostListItem";
 import { supabase } from "../../../lib/SuperBase";
 import { useState,useEffect } from "react";
 import {Tables} from "../../../types/database.types"
+import {useQuery} from "@tanstack/react-query"
+import { featchPosts } from "../../services/postService";
 
-type Post = Tables<"posts"> & {
-    user : Tables<"users">;
-    group: Tables<"groups">;
-};
 
 export default function HomeScreen() {
 
-    const [posts,setPosts] = useState<Post[]>([]);
+    const {data: posts, isLoading,error} = useQuery({
+        queryKey:["posts"],
+        queryFn: () => featchPosts()
+    });
 
-    useEffect(() => {
-       featchPosts(); 
-    },[])
-
-    const featchPosts = async () => {
-        const {data,error} = await supabase
-                        .from('posts')
-                        .select("*, group:groups(*),user:users!posts_user_id_fkey(*)");
-        if(error){
-            console.log(error);
-        }else{
-            setPosts(data);
-        }
-    };
+    if(isLoading){
+        return <ActivityIndicator />;
+    }
+    if(error){
+        <Text>Error fetching posts</Text>
+    }
     return (
         <View>
             <FlatList 

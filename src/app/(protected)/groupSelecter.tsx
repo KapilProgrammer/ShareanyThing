@@ -6,9 +6,12 @@ import { useState } from "react";
 import  groups from "../../../assets/data/groups.json";
 import { selectedGroupAtom } from "../../atom";
 import { useSetAtom } from "jotai";
-import { Group } from "../../typs";
+// import { Group } from "../../typs";
 import { useQuery } from "@tanstack/react-query";
 import { featchGroup } from "../services/groupService";
+import { Tables } from "../../types/database.types";
+
+type Group = Tables<"groups">;
 
 export default function GroupSelecter() {
     const [value, setValue] = useState<string>("");
